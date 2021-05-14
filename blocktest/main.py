@@ -1,34 +1,45 @@
 import pygame
 from pygame.locals import *
 import os
-import player
 
-WIDTH, HEIGHT = 720, 480
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+# Initiating
+pygame.init()
+screen = pygame.display.set_mode( (720, 480) )
 pygame.display.set_caption('Blocks')
 
-WHITE = (255, 255, 255)
-BLUE = (0,0,255)
+
+# Constant Variables
+GRAY = (200,200,200)
+BLUE = (0,0,200)
 FPS = 30
+clock = pygame.time.Clock()
+active = True
 
-def draw_window():
-    WIN.fill(WHITE)
-    pygame.draw.rect(WIN, BLUE, pygame.Rect(30, 30, 60, 60))
-    pygame.draw.line(WIN, (0, 0, 0), (0, 390), (719, 390), 20)
-    pygame.display.update()
+# Drawings
+def draw():
+    player_sprite = pygame.draw.rect(screen, BLUE, pygame.Rect(30, 321, 60, 60))
+    ground = pygame.draw.line(screen, (0, 0, 100), (0, 390), (719, 390), 20)
 
-def main():
-    clock = pygame.time.Clock()
-    run = True
-    while run:
-        clock.tick(FPS)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-        if playerRect.colliderect(wallRect) == True:
-            pass
-        draw_window()
-    pygame.quit()
+    # screen.blit(player_sprite, (30, 321)) [Only works on sprite images not on shapes]
+    screen.fill(GRAY)
+    pygame.display.flip()
 
-if __name__ == '__main__':
-    main()
+# Game Loop
+while active:
+    clock.tick(FPS)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            active = False
+
+    # Inputs
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_a]:
+        player_sprite.x += 10
+    if keys[pygame.K_d]:
+        player_sprite.x -= 10
+
+    # Draw
+    draw()
+
+# Quit
+pygame.quit()
